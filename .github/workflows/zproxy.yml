@@ -1,13 +1,14 @@
 name: OWASP ZAP Security Scan
-  on: [push]
-  jobs:
-    zap_scan:
-      runs-on: ubuntu-latest
-      name: Run DAST scan on the web application
-      steps:
-      - name: Checkout source code
-        uses: actions/checkout@v3
-      - name: Run OWASP ZAP scan
-        uses: zaproxy/action-full-scan@v0.10.0 # Or use zaproxy/action-baseline@v0.6.1 for baseline scan
-        with:
-          target: 'https://zestful-peace-production.up.railway.app/' # Replace with your application's URL
+on: [push]
+
+jobs:
+zap_scan:
+  runs-on: ubuntu-latest
+  name: Run DAST scan on the web application
+  steps:
+    - name: Checkout source code
+      uses: actions/checkout@v3
+    - name: Run OWASP ZAP scan
+      uses: zaproxy/action-full-scan@v0.10.0 # Or use zaproxy/action-baseline@v0.6.1 for baseline scan
+      with:
+        target: "https://zestful-peace-production.up.railway.app/" # Replace with your application's URL
