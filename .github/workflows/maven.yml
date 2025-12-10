@@ -31,7 +31,6 @@ jobs:
       run: mvn -B test
 
   snyk-scanning:
-    needs: build-and-test
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
