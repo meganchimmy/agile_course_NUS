@@ -11,7 +11,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.hamcrest.Matchers.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,7 +44,7 @@ public class PersonControllerTest {
 
     @Test
     public void testIndex() throws Exception {
-        mockMvc.perform(get("/person"))
+        mockMvc.perform(get("/person/"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("index"))
                 .andExpect(model().attribute("message", WELCOME_MESSAGE));
@@ -68,10 +69,10 @@ public class PersonControllerTest {
 
         mockMvc.perform(get("/person/testRetrieve"))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
-                // .andExpect(jsonPath("$.length()").value(2))
-                // .andExpect(jsonPath("$[0].firstName").value("John"))
-                // .andExpect(jsonPath("$[1].lastName").value("Smith"));
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("$[0].firstName").value("John"))
+                .andExpect(jsonPath("$[1].lastName").value("Smith"));
 
         verify(personService, times(1)).getPersons();
     }
@@ -98,7 +99,7 @@ public class PersonControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("addPerson"))
                 .andExpect(model().attributeExists("personForm"))
-                .andExpect(model().attribute("personForm", any(PersonForm.class)));
+                .andExpect(model().attribute("personForm", isA(PersonForm.class)));
     }
 
     @Test
@@ -137,7 +138,9 @@ public class PersonControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("editPerson"))
                 .andExpect(model().attributeExists("per"))
-                .andExpect(model().attribute("per", personToEdit));
+                .andExpect(model().attribute("per", hasProperty("id", is("3"))))
+                .andExpect(model().attribute("per", hasProperty("firstName", is("Edit"))))
+                .andExpect(model().attribute("per", hasProperty("lastName", is("Me"))));
     }
 
     @Test

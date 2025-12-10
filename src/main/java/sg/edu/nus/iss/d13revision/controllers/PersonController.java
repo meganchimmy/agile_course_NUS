@@ -16,7 +16,8 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping(path="/person")
-public class PersonController {
+public
+ class PersonController {
     private List<Person> personList = new ArrayList<Person>();
 
     @Autowired
